@@ -7,7 +7,7 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-hyper = { version = "0.14.7", default-features = false, features = [ "client", "http1" ] }
+hyper = { version = "0.14.7", default-features = false, features = [ "client", "http1", "tcp" ] }
 
 [dev-dependencies]
 tokio = { version = "1.5.0", default-features = false, features = [ "rt-multi-thread", "macros", "test-util" ] }
