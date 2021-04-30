@@ -1,6 +1,9 @@
 use hyper::client::connect::HttpConnector;
 use hyper::Body;
 use hyper::Client;
+use hyper::Error;
+use hyper::Request;
+use hyper::Response;
 use hyper::Uri;
 
 pub struct Runner {
@@ -15,6 +18,11 @@ impl Runner {
 
         Runner { endpoint, client }
     }
+
+    pub async fn send(&self, request: Request<Body>) -> Result<Response<Body>, Error> {
+        let response = self.client.request(request).await?;
+        Ok(response)
+    }
 }
 
 #[cfg(test)]
@@ -25,5 +33,18 @@ mod tests {
     async fn init() {
         let test_runner = Runner::init().await;
         assert_eq!(test_runner.endpoint, "http://example.com/foo");
+    }
+
+    #[tokio::test(flavor = "multi_thread")]
+    async fn send() -> Result<(), Error> {
+        let test_runner = Runner::init().await;
+        let request = Request::builder()
+            .method("GET")
+            .uri(test_runner.endpoint.clone())
+            .body(Body::empty())
+            .unwrap();
+        let response = test_runner.send(request).await?;
+        assert_eq!(response.status().as_str(), "404");
+        Ok(())
     }
 }
