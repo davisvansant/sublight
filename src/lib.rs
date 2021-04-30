@@ -20,11 +20,11 @@ impl Runner {
         Runner { endpoint, client }
     }
 
-    pub async fn build_request(&self) -> Request<Body> {
+    pub async fn build_request(&self, method: Method, body: Body) -> Request<Body> {
         Request::builder()
-            .method(Method::GET)
+            .method(method)
             .uri(&self.endpoint)
-            .body(Body::empty())
+            .body(body)
             .unwrap()
     }
 
@@ -47,7 +47,9 @@ mod tests {
     #[tokio::test(flavor = "multi_thread")]
     async fn build_request() {
         let test_runner = Runner::init().await;
-        let test_request = test_runner.build_request().await;
+        let test_method = Method::GET;
+        let test_body = Body::empty();
+        let test_request = test_runner.build_request(test_method, test_body).await;
         assert_eq!(test_request.method().as_str(), "GET");
         assert_eq!(test_request.uri(), "http://example.com/foo");
     }
@@ -55,7 +57,9 @@ mod tests {
     #[tokio::test(flavor = "multi_thread")]
     async fn send() -> Result<(), Error> {
         let test_runner = Runner::init().await;
-        let test_request = test_runner.build_request().await;
+        let test_method = Method::GET;
+        let test_body = Body::empty();
+        let test_request = test_runner.build_request(test_method, test_body).await;
         let test_response = test_runner.send(test_request).await?;
         assert_eq!(test_response.status().as_str(), "404");
         Ok(())
