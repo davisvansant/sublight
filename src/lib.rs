@@ -20,10 +20,31 @@ impl Runner {
         Runner { endpoint, client }
     }
 
-    pub async fn build_request(&self, method: Method, body: Body) -> Request<Body> {
+    pub async fn build_request(
+        &self,
+        method: Method,
+        body: Body,
+        path: Option<&str>,
+    ) -> Request<Body> {
+        let uri_part = self.endpoint.clone().into_parts();
+        let uri = if path.is_some() {
+            Uri::builder()
+                .scheme(uri_part.scheme.unwrap())
+                .authority(uri_part.authority.unwrap())
+                .path_and_query(path.unwrap())
+                .build()
+                .unwrap()
+        } else {
+            Uri::builder()
+                .scheme(uri_part.scheme.unwrap())
+                .authority(uri_part.authority.unwrap())
+                .path_and_query("/foo")
+                .build()
+                .unwrap()
+        };
         Request::builder()
             .method(method)
-            .uri(&self.endpoint)
+            .uri(uri)
             .body(body)
             .unwrap()
     }
@@ -49,7 +70,9 @@ mod tests {
         let test_runner = Runner::init().await;
         let test_method = Method::GET;
         let test_body = Body::empty();
-        let test_request = test_runner.build_request(test_method, test_body).await;
+        let test_request = test_runner
+            .build_request(test_method, test_body, None)
+            .await;
         assert_eq!(test_request.method().as_str(), "GET");
         assert_eq!(test_request.uri(), "http://example.com/foo");
     }
@@ -59,7 +82,9 @@ mod tests {
         let test_runner = Runner::init().await;
         let test_method = Method::GET;
         let test_body = Body::empty();
-        let test_request = test_runner.build_request(test_method, test_body).await;
+        let test_request = test_runner
+            .build_request(test_method, test_body, None)
+            .await;
         let test_response = test_runner.send(test_request).await?;
         assert_eq!(test_response.status().as_str(), "404");
         Ok(())
