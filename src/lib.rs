@@ -40,7 +40,7 @@ mod tests {
         let test_runner = Runner::init().await;
         let request = Request::builder()
             .method("GET")
-            .uri(test_runner.endpoint.clone())
+            .uri(&test_runner.endpoint)
             .body(Body::empty())
             .unwrap();
         let response = test_runner.send(request).await?;
