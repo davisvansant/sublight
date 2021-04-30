@@ -38,7 +38,7 @@ impl Runner {
             Uri::builder()
                 .scheme(uri_part.scheme.unwrap())
                 .authority(uri_part.authority.unwrap())
-                .path_and_query("/foo")
+                .path_and_query("")
                 .build()
                 .unwrap()
         };
@@ -61,32 +61,32 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn init() {
-        let test_runner = Runner::init("http://example.com/foo").await;
-        assert_eq!(test_runner.endpoint, "http://example.com/foo");
+        let test_runner = Runner::init("http://example.com/").await;
+        assert_eq!(test_runner.endpoint, "http://example.com/");
     }
 
     #[tokio::test(flavor = "multi_thread")]
     async fn build_request() {
-        let test_runner = Runner::init("http://example.com/foo").await;
+        let test_runner = Runner::init("http://example.com/").await;
         let test_method = Method::GET;
         let test_body = Body::empty();
         let test_request = test_runner
             .build_request(test_method, test_body, None)
             .await;
         assert_eq!(test_request.method().as_str(), "GET");
-        assert_eq!(test_request.uri(), "http://example.com/foo");
+        assert_eq!(test_request.uri(), "http://example.com/");
     }
 
     #[tokio::test(flavor = "multi_thread")]
     async fn send() -> Result<(), Error> {
-        let test_runner = Runner::init("http://example.com/foo").await;
+        let test_runner = Runner::init("http://example.com/").await;
         let test_method = Method::GET;
         let test_body = Body::empty();
         let test_request = test_runner
             .build_request(test_method, test_body, None)
             .await;
         let test_response = test_runner.send(test_request).await?;
-        assert_eq!(test_response.status().as_str(), "404");
+        assert_eq!(test_response.status().as_str(), "200");
         Ok(())
     }
 }
