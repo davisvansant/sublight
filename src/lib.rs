@@ -13,8 +13,8 @@ pub struct Runner {
 }
 
 impl Runner {
-    pub async fn init() -> Runner {
-        let endpoint = Uri::from_static("http://example.com/foo");
+    pub async fn init(uri: &'static str) -> Runner {
+        let endpoint = Uri::from_static(uri);
         let client = Client::new();
 
         Runner { endpoint, client }
@@ -61,13 +61,13 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn init() {
-        let test_runner = Runner::init().await;
+        let test_runner = Runner::init("http://example.com/foo").await;
         assert_eq!(test_runner.endpoint, "http://example.com/foo");
     }
 
     #[tokio::test(flavor = "multi_thread")]
     async fn build_request() {
-        let test_runner = Runner::init().await;
+        let test_runner = Runner::init("http://example.com/foo").await;
         let test_method = Method::GET;
         let test_body = Body::empty();
         let test_request = test_runner
@@ -79,7 +79,7 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn send() -> Result<(), Error> {
-        let test_runner = Runner::init().await;
+        let test_runner = Runner::init("http://example.com/foo").await;
         let test_method = Method::GET;
         let test_body = Body::empty();
         let test_request = test_runner
