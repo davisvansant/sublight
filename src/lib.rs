@@ -2,6 +2,7 @@ use hyper::client::connect::HttpConnector;
 use hyper::Body;
 use hyper::Client;
 use hyper::Error;
+use hyper::Method;
 use hyper::Request;
 use hyper::Response;
 use hyper::Uri;
@@ -17,6 +18,14 @@ impl Runner {
         let client = Client::new();
 
         Runner { endpoint, client }
+    }
+
+    pub async fn build_request(&self) -> Request<Body> {
+        Request::builder()
+            .method(Method::GET)
+            .uri(&self.endpoint)
+            .body(Body::empty())
+            .unwrap()
     }
 
     pub async fn send(&self, request: Request<Body>) -> Result<Response<Body>, Error> {
@@ -36,15 +45,19 @@ mod tests {
     }
 
     #[tokio::test(flavor = "multi_thread")]
+    async fn build_request() {
+        let test_runner = Runner::init().await;
+        let test_request = test_runner.build_request().await;
+        assert_eq!(test_request.method().as_str(), "GET");
+        assert_eq!(test_request.uri(), "http://example.com/foo");
+    }
+
+    #[tokio::test(flavor = "multi_thread")]
     async fn send() -> Result<(), Error> {
         let test_runner = Runner::init().await;
-        let request = Request::builder()
-            .method("GET")
-            .uri(&test_runner.endpoint)
-            .body(Body::empty())
-            .unwrap();
-        let response = test_runner.send(request).await?;
-        assert_eq!(response.status().as_str(), "404");
+        let test_request = test_runner.build_request().await;
+        let test_response = test_runner.send(test_request).await?;
+        assert_eq!(test_response.status().as_str(), "404");
         Ok(())
     }
 }
