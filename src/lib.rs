@@ -45,18 +45,17 @@ impl Runner {
         body: Body,
         path: Option<&str>,
     ) -> Request<Body> {
-        let uri_part = self.endpoint.clone().into_parts();
         let uri = if path.is_some() {
             Uri::builder()
-                .scheme(uri_part.scheme.unwrap())
-                .authority(uri_part.authority.unwrap())
+                .scheme(self.scheme.to_owned())
+                .authority(self.authority.to_owned())
                 .path_and_query(path.unwrap())
                 .build()
                 .unwrap()
         } else {
             Uri::builder()
-                .scheme(uri_part.scheme.unwrap())
-                .authority(uri_part.authority.unwrap())
+                .scheme(self.scheme.to_owned())
+                .authority(self.authority.to_owned())
                 .path_and_query("")
                 .build()
                 .unwrap()
