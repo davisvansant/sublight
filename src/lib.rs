@@ -8,6 +8,8 @@ use hyper::Request;
 use hyper::Response;
 use hyper::Uri;
 
+pub mod engine;
+
 pub struct Runner {
     pub client: Client<HttpConnector, Body>,
     pub endpoint: Uri,
