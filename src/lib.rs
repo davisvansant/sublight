@@ -1,3 +1,4 @@
+use http::uri::{Authority, Scheme};
 use hyper::client::connect::HttpConnector;
 use hyper::Body;
 use hyper::Client;
@@ -10,14 +11,32 @@ use hyper::Uri;
 pub struct Runner {
     pub client: Client<HttpConnector, Body>,
     pub endpoint: Uri,
+    scheme: Scheme,
+    authority: Authority,
 }
 
 impl Runner {
     pub async fn init(uri: &'static str) -> Runner {
-        let endpoint = Uri::from_static(uri);
         let client = Client::new();
+        let endpoint = Uri::from_static(uri);
+        let uri_part = endpoint.clone().into_parts();
 
-        Runner { endpoint, client }
+        let scheme = match uri_part.scheme {
+            Some(scheme) => scheme,
+            None => panic!("Scheme could not be set!"),
+        };
+
+        let authority = match uri_part.authority {
+            Some(authority) => authority,
+            None => panic!("Authority could not be set!"),
+        };
+
+        Runner {
+            endpoint,
+            client,
+            scheme,
+            authority,
+        }
     }
 
     pub async fn build_request(
@@ -63,6 +82,8 @@ mod tests {
     async fn init() {
         let test_runner = Runner::init("http://example.com/").await;
         assert_eq!(test_runner.endpoint, "http://example.com/");
+        assert_eq!(test_runner.scheme.as_str(), "http");
+        assert_eq!(test_runner.authority.as_str(), "example.com");
     }
 
     #[tokio::test(flavor = "multi_thread")]
