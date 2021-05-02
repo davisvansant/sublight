@@ -3,6 +3,7 @@ use hyper::client::connect::HttpConnector;
 use hyper::Body;
 use hyper::Client;
 use hyper::Error;
+use hyper::HeaderMap;
 use hyper::Method;
 use hyper::Request;
 use hyper::Response;
@@ -13,6 +14,7 @@ pub mod engine;
 pub struct Runner {
     pub client: Client<HttpConnector, Body>,
     pub endpoint: Uri,
+    default_headers: Option<HeaderMap>,
     scheme: Scheme,
     authority: Authority,
 }
@@ -36,6 +38,7 @@ impl Runner {
         Runner {
             endpoint,
             client,
+            default_headers: None,
             scheme,
             authority,
         }
@@ -83,6 +86,7 @@ mod tests {
     async fn init() {
         let test_runner = Runner::init("http://example.com/").await;
         assert_eq!(test_runner.endpoint, "http://example.com/");
+        assert_eq!(test_runner.default_headers.is_none(), true);
         assert_eq!(test_runner.scheme.as_str(), "http");
         assert_eq!(test_runner.authority.as_str(), "example.com");
     }
