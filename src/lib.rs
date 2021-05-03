@@ -14,7 +14,7 @@ pub mod engine;
 pub struct Runner {
     pub client: Client<HttpConnector, Body>,
     pub endpoint: Uri,
-    default_headers: Option<HeaderMap>,
+    default_headers: HeaderMap,
     scheme: Scheme,
     authority: Authority,
 }
@@ -23,6 +23,7 @@ impl Runner {
     pub async fn init(uri: &'static str) -> Runner {
         let client = Client::new();
         let endpoint = Uri::from_static(uri);
+        let default_headers = HeaderMap::new();
         let uri_part = endpoint.clone().into_parts();
 
         let scheme = match uri_part.scheme {
@@ -38,7 +39,7 @@ impl Runner {
         Runner {
             endpoint,
             client,
-            default_headers: None,
+            default_headers,
             scheme,
             authority,
         }
@@ -86,7 +87,7 @@ mod tests {
     async fn init() {
         let test_runner = Runner::init("http://example.com/").await;
         assert_eq!(test_runner.endpoint, "http://example.com/");
-        assert_eq!(test_runner.default_headers.is_none(), true);
+        assert_eq!(test_runner.default_headers.is_empty(), true);
         assert_eq!(test_runner.scheme.as_str(), "http");
         assert_eq!(test_runner.authority.as_str(), "example.com");
     }
