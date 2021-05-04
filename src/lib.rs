@@ -20,7 +20,11 @@ pub struct Runner {
 }
 
 impl Runner {
-    pub async fn init(uri: &'static str) -> Runner {
+    pub async fn init(
+        uri: &'static str,
+        header_name: Option<&'static str>,
+        header_value: Option<&'static str>,
+    ) -> Runner {
         let client = Client::new();
         let endpoint = Uri::from_static(uri);
         let default_headers = HeaderMap::new();
@@ -85,7 +89,7 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn init() {
-        let test_runner = Runner::init("http://example.com/").await;
+        let test_runner = Runner::init("http://example.com/", None, None).await;
         assert_eq!(test_runner.endpoint, "http://example.com/");
         assert_eq!(test_runner.default_headers.is_empty(), true);
         assert_eq!(test_runner.scheme.as_str(), "http");
@@ -94,7 +98,7 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn build_request() {
-        let test_runner = Runner::init("http://example.com/").await;
+        let test_runner = Runner::init("http://example.com/", None, None).await;
         let test_method = Method::GET;
         let test_body = Body::empty();
         let test_request = test_runner
@@ -106,7 +110,7 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn send() -> Result<(), Error> {
-        let test_runner = Runner::init("http://example.com/").await;
+        let test_runner = Runner::init("http://example.com/", None, None).await;
         let test_method = Method::GET;
         let test_body = Body::empty();
         let test_request = test_runner
