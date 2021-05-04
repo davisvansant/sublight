@@ -24,7 +24,7 @@ impl Runner {
     pub async fn init(
         uri: &'static str,
         header_name: Option<&'static str>,
-        header_value: Option<&'static str>,
+        header_value: Option<&str>,
     ) -> Runner {
         let client = Client::new();
         let endpoint = Uri::from_static(uri);
@@ -32,9 +32,11 @@ impl Runner {
 
         if header_name.is_some() && header_value.is_some() {
             let header = HeaderName::from_static(header_name.unwrap());
-            let mut value = HeaderValue::from_static(header_value.unwrap());
-            value.set_sensitive(true);
-            default_headers.insert(header, value);
+            let value = HeaderValue::from_str(header_value.unwrap());
+            if let Ok(mut value) = value {
+                value.set_sensitive(true);
+                default_headers.insert(header, value);
+            }
         }
 
         let uri_part = endpoint.clone().into_parts();
