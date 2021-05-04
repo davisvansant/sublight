@@ -1,5 +1,6 @@
 use http::uri::{Authority, Scheme};
 use hyper::client::connect::HttpConnector;
+use hyper::header::{HeaderName, HeaderValue};
 use hyper::Body;
 use hyper::Client;
 use hyper::Error;
@@ -27,7 +28,14 @@ impl Runner {
     ) -> Runner {
         let client = Client::new();
         let endpoint = Uri::from_static(uri);
-        let default_headers = HeaderMap::new();
+        let mut default_headers = HeaderMap::new();
+
+        if header_name.is_some() && header_value.is_some() {
+            let header = HeaderName::from_static(header_name.unwrap());
+            let value = HeaderValue::from_static(header_value.unwrap());
+            default_headers.insert(header, value);
+        }
+
         let uri_part = endpoint.clone().into_parts();
 
         let scheme = match uri_part.scheme {
@@ -92,6 +100,25 @@ mod tests {
         let test_runner = Runner::init("http://example.com/", None, None).await;
         assert_eq!(test_runner.endpoint, "http://example.com/");
         assert_eq!(test_runner.default_headers.is_empty(), true);
+        assert_eq!(test_runner.scheme.as_str(), "http");
+        assert_eq!(test_runner.authority.as_str(), "example.com");
+    }
+
+    #[tokio::test(flavor = "multi_thread")]
+    async fn init_with_headers() {
+        let test_runner = Runner::init(
+            "http://example.com/",
+            Some("test_header_name"),
+            Some("test_header_value"),
+        )
+        .await;
+        assert_eq!(test_runner.endpoint, "http://example.com/");
+        assert_eq!(test_runner.default_headers.is_empty(), false);
+        assert_eq!(test_runner.default_headers.len(), 1);
+        for (name, value) in test_runner.default_headers.iter() {
+            assert_eq!(name.as_str(), "test_header_name");
+            assert_eq!(value.to_str().unwrap(), "test_header_value");
+        }
         assert_eq!(test_runner.scheme.as_str(), "http");
         assert_eq!(test_runner.authority.as_str(), "example.com");
     }
