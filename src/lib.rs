@@ -32,7 +32,8 @@ impl Runner {
 
         if header_name.is_some() && header_value.is_some() {
             let header = HeaderName::from_static(header_name.unwrap());
-            let value = HeaderValue::from_static(header_value.unwrap());
+            let mut value = HeaderValue::from_static(header_value.unwrap());
+            value.set_sensitive(true);
             default_headers.insert(header, value);
         }
 
@@ -118,6 +119,7 @@ mod tests {
         for (name, value) in test_runner.default_headers.iter() {
             assert_eq!(name.as_str(), "test_header_name");
             assert_eq!(value.to_str().unwrap(), "test_header_value");
+            assert_eq!(value.is_sensitive(), true);
         }
         assert_eq!(test_runner.scheme.as_str(), "http");
         assert_eq!(test_runner.authority.as_str(), "example.com");
