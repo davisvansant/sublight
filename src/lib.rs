@@ -1,4 +1,4 @@
-use http::uri::{Authority, Scheme};
+use http::uri::{Authority, Builder, PathAndQuery, Scheme};
 use hyper::client::connect::HttpConnector;
 use hyper::header::{HeaderName, HeaderValue};
 use hyper::{Body, Client, Error, HeaderMap, Method, Request, Response, Uri};
@@ -85,6 +85,15 @@ impl Runner {
         let response = self.client.request(request).await?;
         Ok(response)
     }
+
+    async fn build_uri(&self, path_and_query: &'static str) -> Result<Uri, http::Error> {
+        let uri = Builder::new()
+            .scheme(self.scheme.as_str())
+            .authority(self.authority.as_str())
+            .path_and_query(PathAndQuery::from_static(path_and_query))
+            .build()?;
+        Ok(uri)
+    }
 }
 
 #[cfg(test)]
@@ -142,6 +151,23 @@ mod tests {
             .await;
         let test_response = test_runner.send(test_request).await?;
         assert_eq!(test_response.status().as_str(), "200");
+        Ok(())
+    }
+
+    #[tokio::test(flavor = "multi_thread")]
+    async fn build_uri() -> Result<(), http::Error> {
+        let test_runner = Runner::init("http://example.com/", None, None).await;
+        // let test_path_and_query = PathAndQuery::from_static("/test_path_and_query");
+        let test_path_and_query = "/test_path_and_query";
+        let test_build_uri = test_runner.build_uri(test_path_and_query).await?;
+        let test_parts = test_build_uri.into_parts();
+
+        assert_eq!(test_parts.scheme.unwrap().as_str(), "http");
+        assert_eq!(test_parts.authority.unwrap().as_str(), "example.com");
+        assert_eq!(
+            test_parts.path_and_query.unwrap().as_str(),
+            "/test_path_and_query",
+        );
         Ok(())
     }
 }
