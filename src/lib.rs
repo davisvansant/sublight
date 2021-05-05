@@ -1,14 +1,7 @@
 use http::uri::{Authority, Scheme};
 use hyper::client::connect::HttpConnector;
 use hyper::header::{HeaderName, HeaderValue};
-use hyper::Body;
-use hyper::Client;
-use hyper::Error;
-use hyper::HeaderMap;
-use hyper::Method;
-use hyper::Request;
-use hyper::Response;
-use hyper::Uri;
+use hyper::{Body, Client, Error, HeaderMap, Method, Request, Response, Uri};
 
 pub mod engine;
 
