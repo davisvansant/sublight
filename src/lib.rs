@@ -23,6 +23,11 @@ impl Runner {
         let endpoint = Uri::from_static(uri);
         let mut default_headers = HeaderMap::new();
 
+        let user_agent_name = http::header::USER_AGENT;
+        let user_agent_value = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
+
+        default_headers.insert(user_agent_name, HeaderValue::from_static(user_agent_value));
+
         if header_name.is_some() && header_value.is_some() {
             let header = HeaderName::from_static(header_name.unwrap());
             let value = HeaderValue::from_str(header_value.unwrap());
@@ -79,7 +84,12 @@ mod tests {
     async fn init() {
         let test_runner = Runner::init("http://example.com/", None, None).await;
         assert_eq!(test_runner.endpoint, "http://example.com/");
-        assert_eq!(test_runner.default_headers.is_empty(), true);
+        assert_eq!(test_runner.default_headers.len(), 1);
+        for (name, value) in test_runner.default_headers.iter() {
+            assert_eq!(name.as_str(), "user-agent");
+            assert_eq!(value.to_str().unwrap(), "sublight/0.1.0");
+            assert_eq!(value.is_sensitive(), false);
+        }
         assert_eq!(test_runner.scheme.as_str(), "http");
         assert_eq!(test_runner.authority.as_str(), "example.com");
     }
@@ -94,12 +104,18 @@ mod tests {
         .await;
         assert_eq!(test_runner.endpoint, "http://example.com/");
         assert_eq!(test_runner.default_headers.is_empty(), false);
-        assert_eq!(test_runner.default_headers.len(), 1);
-        for (name, value) in test_runner.default_headers.iter() {
-            assert_eq!(name.as_str(), "test_header_name");
-            assert_eq!(value.to_str().unwrap(), "test_header_value");
-            assert_eq!(value.is_sensitive(), true);
-        }
+        assert_eq!(test_runner.default_headers.len(), 2);
+        assert_eq!(
+            test_runner
+                .default_headers
+                .get(http::header::USER_AGENT)
+                .unwrap(),
+            "sublight/0.1.0",
+        );
+        assert_eq!(
+            test_runner.default_headers.get("test_header_name").unwrap(),
+            "test_header_value",
+        );
         assert_eq!(test_runner.scheme.as_str(), "http");
         assert_eq!(test_runner.authority.as_str(), "example.com");
     }
