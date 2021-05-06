@@ -23,6 +23,8 @@ impl Runner {
         let endpoint = Uri::from_static(uri);
         let mut default_headers = HeaderMap::new();
 
+        default_headers.reserve(5);
+
         let user_agent_name = http::header::USER_AGENT;
         let user_agent_value = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
 
@@ -85,6 +87,7 @@ mod tests {
         let test_runner = Runner::init("http://example.com/", None, None).await;
         assert_eq!(test_runner.endpoint, "http://example.com/");
         assert_eq!(test_runner.default_headers.len(), 1);
+        assert!(test_runner.default_headers.capacity() >= 5);
         for (name, value) in test_runner.default_headers.iter() {
             assert_eq!(name.as_str(), "user-agent");
             assert_eq!(value.to_str().unwrap(), "sublight/0.1.0");
@@ -105,6 +108,7 @@ mod tests {
         assert_eq!(test_runner.endpoint, "http://example.com/");
         assert_eq!(test_runner.default_headers.is_empty(), false);
         assert_eq!(test_runner.default_headers.len(), 2);
+        assert!(test_runner.default_headers.capacity() >= 5);
         assert_eq!(
             test_runner
                 .default_headers
