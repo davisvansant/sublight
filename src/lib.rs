@@ -53,32 +53,12 @@ impl Runner {
         }
     }
 
-    pub async fn build_request(
-        &self,
-        method: Method,
-        body: Body,
-        path: Option<&str>,
-    ) -> Request<Body> {
-        let uri = if path.is_some() {
-            Uri::builder()
-                .scheme(self.scheme.to_owned())
-                .authority(self.authority.to_owned())
-                .path_and_query(path.unwrap())
-                .build()
-                .unwrap()
-        } else {
-            Uri::builder()
-                .scheme(self.scheme.to_owned())
-                .authority(self.authority.to_owned())
-                .path_and_query("")
-                .build()
-                .unwrap()
-        };
+    async fn build_request(&self, method: Method, uri: Uri, body: Body) -> Request<Body> {
         Request::builder()
             .method(method)
             .uri(uri)
             .body(body)
-            .unwrap()
+            .expect("Could not build Request!")
     }
 
     pub async fn send(&self, request: Request<Body>) -> Result<Response<Body>, Error> {
@@ -133,9 +113,10 @@ mod tests {
     async fn build_request() {
         let test_runner = Runner::init("http://example.com/", None, None).await;
         let test_method = Method::GET;
+        let test_uri = test_runner.endpoint.clone();
         let test_body = Body::empty();
         let test_request = test_runner
-            .build_request(test_method, test_body, None)
+            .build_request(test_method, test_uri, test_body)
             .await;
         assert_eq!(test_request.method().as_str(), "GET");
         assert_eq!(test_request.uri(), "http://example.com/");
@@ -145,9 +126,10 @@ mod tests {
     async fn send() -> Result<(), Error> {
         let test_runner = Runner::init("http://example.com/", None, None).await;
         let test_method = Method::GET;
+        let test_uri = test_runner.endpoint.clone();
         let test_body = Body::empty();
         let test_request = test_runner
-            .build_request(test_method, test_body, None)
+            .build_request(test_method, test_uri, test_body)
             .await;
         let test_response = test_runner.send(test_request).await?;
         assert_eq!(test_response.status().as_str(), "200");
