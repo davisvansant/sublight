@@ -86,13 +86,16 @@ impl Runner {
         Ok(response)
     }
 
-    async fn build_uri(&self, path_and_query: &'static str) -> Result<Uri, http::Error> {
+    async fn build_uri(&self, path_and_query: &'static str) -> Uri {
         let uri = Builder::new()
             .scheme(self.scheme.as_str())
             .authority(self.authority.as_str())
             .path_and_query(PathAndQuery::from_static(path_and_query))
-            .build()?;
-        Ok(uri)
+            .build();
+        match uri {
+            Ok(uri) => uri,
+            Err(error) => panic!("Could not build URI! - {}", error),
+        }
     }
 }
 
@@ -155,10 +158,10 @@ mod tests {
     }
 
     #[tokio::test(flavor = "multi_thread")]
-    async fn build_uri() -> Result<(), http::Error> {
+    async fn build_uri() -> Result<(), Error> {
         let test_runner = Runner::init("http://example.com/", None, None).await;
         let test_path_and_query = "/test_path_and_query";
-        let test_build_uri = test_runner.build_uri(test_path_and_query).await?;
+        let test_build_uri = test_runner.build_uri(test_path_and_query).await;
         let test_parts = test_build_uri.into_parts();
 
         assert_eq!(test_parts.scheme.unwrap().as_str(), "http");
