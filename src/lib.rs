@@ -61,11 +61,6 @@ impl Runner {
             .expect("Could not build Request!")
     }
 
-    pub async fn send(&self, request: Request<Body>) -> Result<Response<Body>, Error> {
-        let response = self.client.request(request).await?;
-        Ok(response)
-    }
-
     async fn build_uri(&self, path_and_query: &'static str) -> Uri {
         Builder::new()
             .scheme(self.scheme.as_str())
@@ -120,20 +115,6 @@ mod tests {
             .await;
         assert_eq!(test_request.method().as_str(), "GET");
         assert_eq!(test_request.uri(), "http://example.com/");
-    }
-
-    #[tokio::test(flavor = "multi_thread")]
-    async fn send() -> Result<(), Error> {
-        let test_runner = Runner::init("http://example.com/", None, None).await;
-        let test_method = Method::GET;
-        let test_uri = test_runner.endpoint.clone();
-        let test_body = Body::empty();
-        let test_request = test_runner
-            .build_request(test_method, test_uri, test_body)
-            .await;
-        let test_response = test_runner.send(test_request).await?;
-        assert_eq!(test_response.status().as_str(), "200");
-        Ok(())
     }
 
     #[tokio::test(flavor = "multi_thread")]
