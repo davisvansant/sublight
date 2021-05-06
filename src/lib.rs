@@ -87,15 +87,12 @@ impl Runner {
     }
 
     async fn build_uri(&self, path_and_query: &'static str) -> Uri {
-        let uri = Builder::new()
+        Builder::new()
             .scheme(self.scheme.as_str())
             .authority(self.authority.as_str())
             .path_and_query(PathAndQuery::from_static(path_and_query))
-            .build();
-        match uri {
-            Ok(uri) => uri,
-            Err(error) => panic!("Could not build URI! - {}", error),
-        }
+            .build()
+            .expect("Could not build URI!")
     }
 }
 
