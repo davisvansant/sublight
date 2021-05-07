@@ -16,11 +16,7 @@ pub struct Runner {
 }
 
 impl Runner {
-    pub async fn init(
-        uri: &str,
-        header_name: Option<&str>,
-        header_value: Option<&str>,
-    ) -> Runner {
+    pub async fn init(uri: &str, header_name: Option<&str>, header_value: Option<&str>) -> Runner {
         let client = Client::new();
         let endpoint = Uri::from_str(uri).unwrap();
         let mut default_headers = HeaderMap::new();
