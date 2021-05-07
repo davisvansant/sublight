@@ -52,8 +52,8 @@ impl Runner {
         };
 
         Runner {
-            endpoint,
             client,
+            endpoint,
             default_headers,
             scheme,
             authority,
