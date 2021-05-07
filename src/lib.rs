@@ -3,6 +3,8 @@ use hyper::client::connect::HttpConnector;
 use hyper::header::{HeaderName, HeaderValue};
 use hyper::{Body, Client, Error, HeaderMap, Method, Request, Response, Uri};
 
+use std::str::FromStr;
+
 pub mod engine;
 
 pub struct Runner {
@@ -15,12 +17,12 @@ pub struct Runner {
 
 impl Runner {
     pub async fn init(
-        uri: &'static str,
-        header_name: Option<&'static str>,
+        uri: &str,
+        header_name: Option<&str>,
         header_value: Option<&str>,
     ) -> Runner {
         let client = Client::new();
-        let endpoint = Uri::from_static(uri);
+        let endpoint = Uri::from_str(uri).unwrap();
         let mut default_headers = HeaderMap::new();
 
         default_headers.reserve(5);
@@ -28,10 +30,13 @@ impl Runner {
         let user_agent_name = http::header::USER_AGENT;
         let user_agent_value = concat!(env!("CARGO_PKG_NAME"), "/", env!("CARGO_PKG_VERSION"));
 
-        default_headers.insert(user_agent_name, HeaderValue::from_static(user_agent_value));
+        default_headers.insert(
+            user_agent_name,
+            HeaderValue::from_str(user_agent_value).unwrap(),
+        );
 
         if header_name.is_some() && header_value.is_some() {
-            let header = HeaderName::from_static(header_name.unwrap());
+            let header = HeaderName::from_str(header_name.unwrap()).unwrap();
             let value = HeaderValue::from_str(header_value.unwrap());
             if let Ok(mut value) = value {
                 value.set_sensitive(true);
