@@ -61,11 +61,19 @@ impl Runner {
     }
 
     async fn build_request(&self, method: Method, uri: Uri, body: Body) -> Request<Body> {
-        Request::builder()
+        let mut request = Request::builder()
             .method(method)
             .uri(uri)
             .body(body)
-            .expect("Could not build Request!")
+            .expect("Could not build Request!");
+
+        let headers = request.headers_mut();
+
+        for (name, value) in self.default_headers.iter() {
+            headers.insert(name, value.to_owned());
+        }
+
+        request
     }
 
     async fn build_uri(&self, path_and_query: &'static str) -> Uri {
@@ -135,6 +143,11 @@ mod tests {
             .await;
         assert_eq!(test_request.method().as_str(), "GET");
         assert_eq!(test_request.uri(), "http://example.com/");
+        assert_eq!(test_request.headers().len(), 1);
+        for (key, value) in test_request.headers().iter() {
+            assert_eq!(key.as_str(), "user-agent");
+            assert_eq!(value.to_str().unwrap(), "sublight/0.1.0");
+        }
     }
 
     #[tokio::test(flavor = "multi_thread")]
