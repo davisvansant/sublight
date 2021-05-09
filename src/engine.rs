@@ -1,1 +1,1 @@
-// unimplemented!()
+pub mod consul;
