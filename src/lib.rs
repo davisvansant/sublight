@@ -1,4 +1,4 @@
-use http::uri::{Authority, Builder, PathAndQuery, Scheme};
+use http::uri::{Authority, Builder, Scheme};
 use hyper::client::connect::HttpConnector;
 use hyper::header::{HeaderName, HeaderValue};
 use hyper::{Body, Client, Error, HeaderMap, Method, Request, Response, Uri};
@@ -77,11 +77,11 @@ impl Runner {
         request
     }
 
-    async fn build_uri(&self, path_and_query: &'static str) -> Uri {
+    async fn build_uri(&self, path_and_query: &str) -> Uri {
         Builder::new()
             .scheme(self.scheme.as_str())
             .authority(self.authority.as_str())
-            .path_and_query(PathAndQuery::from_static(path_and_query))
+            .path_and_query(path_and_query)
             .build()
             .expect("Could not build URI!")
     }
