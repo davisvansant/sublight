@@ -2,13 +2,14 @@ use http::uri::{Authority, Builder, Scheme};
 use hyper::client::connect::HttpConnector;
 use hyper::header::{HeaderName, HeaderValue};
 use hyper::{Body, Client, Error, HeaderMap, Method, Request, Response, Uri};
+use hyper_tls::HttpsConnector;
 
 use std::str::FromStr;
 
 pub mod engine;
 
 pub struct Runner {
-    pub client: Client<HttpConnector, Body>,
+    pub client: Client<HttpsConnector<HttpConnector>, Body>,
     pub endpoint: Uri,
     default_headers: HeaderMap,
     scheme: Scheme,
@@ -17,7 +18,8 @@ pub struct Runner {
 
 impl Runner {
     pub async fn init(uri: &str, header_name: Option<&str>, header_value: Option<&str>) -> Runner {
-        let client = Client::new();
+        let https = HttpsConnector::new();
+        let client = Client::builder().build(https);
         let endpoint = Uri::from_str(uri).unwrap();
         let mut default_headers = HeaderMap::new();
 
