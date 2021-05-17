@@ -6,4 +6,5 @@ pub mod coordinate;
 pub mod event;
 pub mod health;
 pub mod kv_store;
+pub mod snapshot;
 pub mod status;
