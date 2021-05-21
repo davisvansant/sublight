@@ -1,6 +1,7 @@
 use crate::{Body, Error, Method, Response, Runner};
 
 pub mod checks;
+pub mod connect;
 pub mod service;
 
 impl Runner {
