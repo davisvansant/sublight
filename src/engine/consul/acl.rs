@@ -1,5 +1,7 @@
 use crate::{Body, Error, Method, Response, Runner};
 
+pub mod token;
+
 impl Runner {
     pub async fn acl_bootstrap(&self) -> Result<Response<Body>, Error> {
         let path = "/v1/acl/bootstrap";
