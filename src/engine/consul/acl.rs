@@ -1,6 +1,7 @@
 use crate::{Body, Error, Method, Response, Runner};
 
 pub mod auth_method;
+pub mod binding_rule;
 pub mod policy;
 pub mod role;
 pub mod token;
