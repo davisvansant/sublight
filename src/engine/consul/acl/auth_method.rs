@@ -1,8 +1,10 @@
 use crate::{Body, Error, Method, Response, Runner};
 
+const ACL_AUTH_METHOD_BASE_URL: &str = "/v1/acl/auth-method";
+
 impl Runner {
     pub async fn acl_auth_method_create(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/acl/auth-method";
+        let path = ACL_AUTH_METHOD_BASE_URL;
         let method = Method::PUT;
         let uri = self.build_uri(path).await;
         let body = Body::empty();
@@ -12,7 +14,7 @@ impl Runner {
     }
 
     pub async fn acl_auth_method_read(&self, name: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/acl/auth-method/{}", name);
+        let path = format!("{}/{}", ACL_AUTH_METHOD_BASE_URL, name);
         let method = Method::GET;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -22,7 +24,7 @@ impl Runner {
     }
 
     pub async fn acl_auth_method_update(&self, name: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/acl/auth-method/{}", name);
+        let path = format!("{}/{}", ACL_AUTH_METHOD_BASE_URL, name);
         let method = Method::PUT;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -32,7 +34,7 @@ impl Runner {
     }
 
     pub async fn acl_auth_method_delete(&self, name: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/acl/auth-method/{}", name);
+        let path = format!("{}/{}", ACL_AUTH_METHOD_BASE_URL, name);
         let method = Method::DELETE;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -42,9 +44,9 @@ impl Runner {
     }
 
     pub async fn acl_auth_methods(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/acl/auth-methods";
+        let path = format!("{}{}", ACL_AUTH_METHOD_BASE_URL, "s");
         let method = Method::GET;
-        let uri = self.build_uri(path).await;
+        let uri = self.build_uri(&path).await;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
         let response = self.client.request(request).await?;
