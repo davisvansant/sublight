@@ -6,11 +6,13 @@ pub mod policy;
 pub mod role;
 pub mod token;
 
+const ACL_BASE_URL: &str = "/v1/acl";
+
 impl Runner {
     pub async fn acl_bootstrap(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/acl/bootstrap";
+        let path = format!("{}/bootstrap", ACL_BASE_URL);
         let method = Method::PUT;
-        let uri = self.build_uri(path).await;
+        let uri = self.build_uri(&path).await;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
         let response = self.client.request(request).await?;
@@ -18,9 +20,9 @@ impl Runner {
     }
 
     pub async fn acl_replication(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/acl/replication";
+        let path = format!("{}/replication", ACL_BASE_URL);
         let method = Method::GET;
-        let uri = self.build_uri(path).await;
+        let uri = self.build_uri(&path).await;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
         let response = self.client.request(request).await?;
@@ -28,9 +30,9 @@ impl Runner {
     }
 
     pub async fn acl_login(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/acl/login";
+        let path = format!("{}/login", ACL_BASE_URL);
         let method = Method::POST;
-        let uri = self.build_uri(path).await;
+        let uri = self.build_uri(&path).await;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
         let response = self.client.request(request).await?;
@@ -38,9 +40,9 @@ impl Runner {
     }
 
     pub async fn acl_logout(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/acl/logout";
+        let path = format!("{}/logout", ACL_BASE_URL);
         let method = Method::POST;
-        let uri = self.build_uri(path).await;
+        let uri = self.build_uri(&path).await;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
         let response = self.client.request(request).await?;
