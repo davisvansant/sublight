@@ -1,9 +1,11 @@
 use crate::{Body, Error, Method, Response, Runner};
 
+const AGENT_CONNECT_BASE_URL: &str = "/v1/agent/connect";
+
 impl Runner {
     pub async fn agent_connect_authorize(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/agent/connect/authorize";
-        let uri = self.build_uri(path).await;
+        let path = format!("{}/authorize", AGENT_CONNECT_BASE_URL);
+        let uri = self.build_uri(&path).await;
         let method = Method::PUT;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
@@ -12,8 +14,8 @@ impl Runner {
     }
 
     pub async fn agent_connect_ca_roots(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/agent/connect/ca/roots";
-        let uri = self.build_uri(path).await;
+        let path = format!("{}/ca/roots", AGENT_CONNECT_BASE_URL);
+        let uri = self.build_uri(&path).await;
         let method = Method::GET;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
@@ -22,7 +24,7 @@ impl Runner {
     }
 
     pub async fn agent_connect_ca_leaf(&self, service: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/agent/connect/ca/leaf/{}", service);
+        let path = format!("{}/ca/leaf/{}", AGENT_CONNECT_BASE_URL, service);
         let uri = self.build_uri(&path).await;
         let method = Method::GET;
         let body = Body::empty();
