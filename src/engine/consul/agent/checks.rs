@@ -1,9 +1,11 @@
 use crate::{Body, Error, Method, Response, Runner};
 
+const AGENT_CHECKS_BASE_URL: &str = "/v1/agent/check";
+
 impl Runner {
     pub async fn agent_checks(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/agent/checks";
-        let uri = self.build_uri(path).await;
+        let path = format!("{}{}", AGENT_CHECKS_BASE_URL, "s");
+        let uri = self.build_uri(&path).await;
         let method = Method::GET;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
@@ -12,8 +14,8 @@ impl Runner {
     }
 
     pub async fn agent_check_register(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/agent/check/register";
-        let uri = self.build_uri(path).await;
+        let path = format!("{}/register", AGENT_CHECKS_BASE_URL);
+        let uri = self.build_uri(&path).await;
         let method = Method::PUT;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
@@ -22,7 +24,7 @@ impl Runner {
     }
 
     pub async fn agent_check_deregister(&self, check_id: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/agent/check/deregister/{}", check_id);
+        let path = format!("{}/deregister/{}", AGENT_CHECKS_BASE_URL, check_id);
         let uri = self.build_uri(&path).await;
         let method = Method::PUT;
         let body = Body::empty();
@@ -32,7 +34,7 @@ impl Runner {
     }
 
     pub async fn agent_check_pass(&self, check_id: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/agent/check/pass/{}", check_id);
+        let path = format!("{}/pass/{}", AGENT_CHECKS_BASE_URL, check_id);
         let uri = self.build_uri(&path).await;
         let method = Method::PUT;
         let body = Body::empty();
@@ -42,7 +44,7 @@ impl Runner {
     }
 
     pub async fn agent_check_warn(&self, check_id: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/agent/check/warn/{}", check_id);
+        let path = format!("{}/warn/{}", AGENT_CHECKS_BASE_URL, check_id);
         let uri = self.build_uri(&path).await;
         let method = Method::PUT;
         let body = Body::empty();
@@ -52,7 +54,7 @@ impl Runner {
     }
 
     pub async fn agent_check_fail(&self, check_id: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/agent/check/fail/{}", check_id);
+        let path = format!("{}/fail/{}", AGENT_CHECKS_BASE_URL, check_id);
         let uri = self.build_uri(&path).await;
         let method = Method::PUT;
         let body = Body::empty();
@@ -62,7 +64,7 @@ impl Runner {
     }
 
     pub async fn agent_check_update(&self, check_id: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/agent/check/update/{}", check_id);
+        let path = format!("{}/update/{}", AGENT_CHECKS_BASE_URL, check_id);
         let uri = self.build_uri(&path).await;
         let method = Method::PUT;
         let body = Body::empty();
