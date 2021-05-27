@@ -1,8 +1,10 @@
 use crate::{Body, Error, Method, Response, Runner};
 
+const ACL_TOKEN_BASE_URL: &str = "/v1/acl/token";
+
 impl Runner {
     pub async fn acl_token_create(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/acl/token";
+        let path = ACL_TOKEN_BASE_URL;
         let method = Method::PUT;
         let uri = self.build_uri(path).await;
         let body = Body::empty();
@@ -12,7 +14,7 @@ impl Runner {
     }
 
     pub async fn acl_token_get(&self, accessor_id: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/acl/token/{}", accessor_id);
+        let path = format!("{}/{}", ACL_TOKEN_BASE_URL, accessor_id);
         let method = Method::GET;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -22,9 +24,9 @@ impl Runner {
     }
 
     pub async fn acl_token_self(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/acl/token/self";
+        let path = format!("{}/self", ACL_TOKEN_BASE_URL);
         let method = Method::GET;
-        let uri = self.build_uri(path).await;
+        let uri = self.build_uri(&path).await;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
         let response = self.client.request(request).await?;
@@ -32,7 +34,7 @@ impl Runner {
     }
 
     pub async fn acl_token_update(&self, accessor_id: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/acl/token/{}", accessor_id);
+        let path = format!("{}/{}", ACL_TOKEN_BASE_URL, accessor_id);
         let method = Method::PUT;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -42,7 +44,7 @@ impl Runner {
     }
 
     pub async fn acl_token_clone(&self, accessor_id: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/acl/token/{}/clone", accessor_id);
+        let path = format!("{}/{}/clone", ACL_TOKEN_BASE_URL, accessor_id);
         let method = Method::PUT;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -52,7 +54,7 @@ impl Runner {
     }
 
     pub async fn acl_token_delete(&self, accessor_id: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/acl/token/{}", accessor_id);
+        let path = format!("{}/{}", ACL_TOKEN_BASE_URL, accessor_id);
         let method = Method::DELETE;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -62,9 +64,9 @@ impl Runner {
     }
 
     pub async fn acl_tokens(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/acl/tokens";
+        let path = format!("{}{}", ACL_TOKEN_BASE_URL, "s");
         let method = Method::GET;
-        let uri = self.build_uri(path).await;
+        let uri = self.build_uri(&path).await;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
         let response = self.client.request(request).await?;
