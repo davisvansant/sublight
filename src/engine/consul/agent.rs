@@ -4,10 +4,12 @@ pub mod checks;
 pub mod connect;
 pub mod service;
 
+const AGENT_BASE_URL: &str = "/v1/agent";
+
 impl Runner {
     pub async fn list_members(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/agent/members";
-        let uri = self.build_uri(path).await;
+        let path = format!("{}/members", AGENT_BASE_URL);
+        let uri = self.build_uri(&path).await;
         let method = Method::GET;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
@@ -16,8 +18,8 @@ impl Runner {
     }
 
     pub async fn agent_self(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/agent/self";
-        let uri = self.build_uri(path).await;
+        let path = format!("{}/self", AGENT_BASE_URL);
+        let uri = self.build_uri(&path).await;
         let method = Method::GET;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
@@ -26,8 +28,8 @@ impl Runner {
     }
 
     pub async fn agent_reload(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/agent/reload";
-        let uri = self.build_uri(path).await;
+        let path = format!("{}/reload", AGENT_BASE_URL);
+        let uri = self.build_uri(&path).await;
         let method = Method::PUT;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
@@ -36,8 +38,8 @@ impl Runner {
     }
 
     pub async fn agent_maintenance(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/agent/maintentance";
-        let uri = self.build_uri(path).await;
+        let path = format!("{}/maintentance", AGENT_BASE_URL);
+        let uri = self.build_uri(&path).await;
         let method = Method::PUT;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
@@ -46,8 +48,8 @@ impl Runner {
     }
 
     pub async fn agent_metrics(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/agent/metrics";
-        let uri = self.build_uri(path).await;
+        let path = format!("{}/metrics", AGENT_BASE_URL);
+        let uri = self.build_uri(&path).await;
         let method = Method::GET;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
@@ -56,8 +58,8 @@ impl Runner {
     }
 
     pub async fn agent_monitor(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/agent/monitor";
-        let uri = self.build_uri(path).await;
+        let path = format!("{}/monitor", AGENT_BASE_URL);
+        let uri = self.build_uri(&path).await;
         let method = Method::GET;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
@@ -66,7 +68,7 @@ impl Runner {
     }
 
     pub async fn agent_join(&self, address: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/agent/join/{}", address);
+        let path = format!("{}/join/{}", AGENT_BASE_URL, address);
         let uri = self.build_uri(&path).await;
         let method = Method::PUT;
         let body = Body::empty();
@@ -76,8 +78,8 @@ impl Runner {
     }
 
     pub async fn agent_leave(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/agent/leave";
-        let uri = self.build_uri(path).await;
+        let path = format!("{}/leave", AGENT_BASE_URL);
+        let uri = self.build_uri(&path).await;
         let method = Method::PUT;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
