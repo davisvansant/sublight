@@ -1,8 +1,10 @@
 use crate::{Body, Error, Method, Response, Runner};
 
+const ACL_POLICY_BASE_URL: &str = "/v1/acl/policy";
+
 impl Runner {
     pub async fn acl_policy_create(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/acl/policy";
+        let path = ACL_POLICY_BASE_URL;
         let method = Method::PUT;
         let uri = self.build_uri(path).await;
         let body = Body::empty();
@@ -12,7 +14,7 @@ impl Runner {
     }
 
     pub async fn acl_policy_read(&self, id: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/acl/policy/{}", id);
+        let path = format!("{}/{}", ACL_POLICY_BASE_URL, id);
         let method = Method::GET;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -22,7 +24,7 @@ impl Runner {
     }
 
     pub async fn acl_policy_read_name(&self, name: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/acl/policy/name/{}", name);
+        let path = format!("{}/name/{}", ACL_POLICY_BASE_URL, name);
         let method = Method::GET;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -32,7 +34,7 @@ impl Runner {
     }
 
     pub async fn acl_policy_update(&self, id: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/acl/policy/{}", id);
+        let path = format!("{}/{}", ACL_POLICY_BASE_URL, id);
         let method = Method::PUT;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -42,7 +44,7 @@ impl Runner {
     }
 
     pub async fn acl_policy_delete(&self, id: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/acl/policy/{}", id);
+        let path = format!("{}/{}", ACL_POLICY_BASE_URL, id);
         let method = Method::DELETE;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -52,9 +54,9 @@ impl Runner {
     }
 
     pub async fn acl_policies(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/acl/policies";
+        let path = format!("{}{}", ACL_POLICY_BASE_URL.trim_end_matches('y'), "ies");
         let method = Method::GET;
-        let uri = self.build_uri(path).await;
+        let uri = self.build_uri(&path).await;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
         let response = self.client.request(request).await?;
