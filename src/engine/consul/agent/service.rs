@@ -1,9 +1,11 @@
 use crate::{Body, Error, Method, Response, Runner};
 
+const AGENT_SERVICE_BASE_URL: &str = "/v1/agent/service";
+
 impl Runner {
     pub async fn agent_services(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/agent/services";
-        let uri = self.build_uri(path).await;
+        let path = format!("{}{}", AGENT_SERVICE_BASE_URL, "s");
+        let uri = self.build_uri(&path).await;
         let method = Method::GET;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
@@ -15,7 +17,7 @@ impl Runner {
         &self,
         service_id: &str,
     ) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/agent/service/{}", service_id);
+        let path = format!("{}/{}", AGENT_SERVICE_BASE_URL, service_id);
         let uri = self.build_uri(&path).await;
         let method = Method::GET;
         let body = Body::empty();
@@ -28,7 +30,11 @@ impl Runner {
         &self,
         service_name: &str,
     ) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/agent/health/service/name/{}", service_name);
+        let path = format!(
+            "{}/health/service/name/{}",
+            AGENT_SERVICE_BASE_URL.trim_end_matches("/service"),
+            service_name,
+        );
         let uri = self.build_uri(&path).await;
         let method = Method::GET;
         let body = Body::empty();
@@ -38,7 +44,11 @@ impl Runner {
     }
 
     pub async fn agent_health_service_id(&self, service_id: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/agent/health/service/id/{}", service_id);
+        let path = format!(
+            "{}/health/service/id/{}",
+            AGENT_SERVICE_BASE_URL.trim_end_matches("/service"),
+            service_id,
+        );
         let uri = self.build_uri(&path).await;
         let method = Method::GET;
         let body = Body::empty();
@@ -48,8 +58,8 @@ impl Runner {
     }
 
     pub async fn agent_service_register(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/agent/service/register";
-        let uri = self.build_uri(path).await;
+        let path = format!("{}/register", AGENT_SERVICE_BASE_URL);
+        let uri = self.build_uri(&path).await;
         let method = Method::PUT;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
@@ -61,7 +71,7 @@ impl Runner {
         &self,
         service_id: &str,
     ) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/agent/service/deregister/{}", service_id);
+        let path = format!("{}/deregister/{}", AGENT_SERVICE_BASE_URL, service_id);
         let uri = self.build_uri(&path).await;
         let method = Method::PUT;
         let body = Body::empty();
@@ -74,7 +84,7 @@ impl Runner {
         &self,
         service_id: &str,
     ) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/agent/service/maintentance/{}", service_id);
+        let path = format!("{}/maintentance/{}", AGENT_SERVICE_BASE_URL, service_id);
         let uri = self.build_uri(&path).await;
         let method = Method::PUT;
         let body = Body::empty();
