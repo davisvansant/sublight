@@ -1,8 +1,10 @@
 use crate::{Body, Error, Method, Response, Runner};
 
+const ACL_ROLE_BASE_URL: &str = "/v1/acl/role";
+
 impl Runner {
     pub async fn acl_role_create(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/acl/role";
+        let path = ACL_ROLE_BASE_URL;
         let method = Method::PUT;
         let uri = self.build_uri(path).await;
         let body = Body::empty();
@@ -12,7 +14,7 @@ impl Runner {
     }
 
     pub async fn acl_role_read(&self, id: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/acl/role/{}", id);
+        let path = format!("{}/{}", ACL_ROLE_BASE_URL, id);
         let method = Method::GET;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -22,7 +24,7 @@ impl Runner {
     }
 
     pub async fn acl_role_read_name(&self, name: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/acl/role/name/{}", name);
+        let path = format!("{}/name/{}", ACL_ROLE_BASE_URL, name);
         let method = Method::GET;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -32,7 +34,7 @@ impl Runner {
     }
 
     pub async fn acl_role_update(&self, id: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/acl/role/{}", id);
+        let path = format!("{}/{}", ACL_ROLE_BASE_URL, id);
         let method = Method::PUT;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -42,7 +44,7 @@ impl Runner {
     }
 
     pub async fn acl_role_delete(&self, id: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/acl/role/{}", id);
+        let path = format!("{}/{}", ACL_ROLE_BASE_URL, id);
         let method = Method::DELETE;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -52,9 +54,9 @@ impl Runner {
     }
 
     pub async fn acl_roles(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/acl/roles";
+        let path = format!("{}{}", ACL_ROLE_BASE_URL, "s");
         let method = Method::GET;
-        let uri = self.build_uri(path).await;
+        let uri = self.build_uri(&path).await;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
         let response = self.client.request(request).await?;
