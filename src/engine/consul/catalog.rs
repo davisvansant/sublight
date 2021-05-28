@@ -1,10 +1,12 @@
 use crate::{Body, Error, Method, Response, Runner};
 
+const CATALOG_BASE_URL: &str = "/v1/catalog";
+
 impl Runner {
     pub async fn catalog_register(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/catalog/register";
+        let path = format!("{}/register", CATALOG_BASE_URL);
         let method = Method::PUT;
-        let uri = self.build_uri(path).await;
+        let uri = self.build_uri(&path).await;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
         let response = self.client.request(request).await?;
@@ -12,9 +14,9 @@ impl Runner {
     }
 
     pub async fn catalog_deregister(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/catalog/deregister";
+        let path = format!("{}/deregister", CATALOG_BASE_URL);
         let method = Method::PUT;
-        let uri = self.build_uri(path).await;
+        let uri = self.build_uri(&path).await;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
         let response = self.client.request(request).await?;
@@ -22,9 +24,9 @@ impl Runner {
     }
 
     pub async fn catalog_datacenters(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/catalog/datacenters";
+        let path = format!("{}/datacenters", CATALOG_BASE_URL);
         let method = Method::GET;
-        let uri = self.build_uri(path).await;
+        let uri = self.build_uri(&path).await;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
         let response = self.client.request(request).await?;
@@ -32,9 +34,9 @@ impl Runner {
     }
 
     pub async fn catalog_nodes(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/catalog/nodes";
+        let path = format!("{}/nodes", CATALOG_BASE_URL);
         let method = Method::GET;
-        let uri = self.build_uri(path).await;
+        let uri = self.build_uri(&path).await;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
         let response = self.client.request(request).await?;
@@ -42,9 +44,9 @@ impl Runner {
     }
 
     pub async fn catalog_services(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/catalog/services";
+        let path = format!("{}/services", CATALOG_BASE_URL);
         let method = Method::GET;
-        let uri = self.build_uri(path).await;
+        let uri = self.build_uri(&path).await;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
         let response = self.client.request(request).await?;
@@ -52,7 +54,7 @@ impl Runner {
     }
 
     pub async fn catalog_service_nodes(&self, service: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/catalog/service/{}", service);
+        let path = format!("{}/service/{}", CATALOG_BASE_URL, service);
         let method = Method::GET;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -62,7 +64,7 @@ impl Runner {
     }
 
     pub async fn catalog_connect_nodes(&self, service: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/catalog/connect/{}", service);
+        let path = format!("{}/connect/{}", CATALOG_BASE_URL, service);
         let method = Method::GET;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -72,7 +74,7 @@ impl Runner {
     }
 
     pub async fn catalog_node(&self, node: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/catalog/node/{}", node);
+        let path = format!("{}/node/{}", CATALOG_BASE_URL, node);
         let method = Method::GET;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -82,7 +84,7 @@ impl Runner {
     }
 
     pub async fn catalog_node_services(&self, node: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/catalog/node-services/{}", node);
+        let path = format!("{}/node-services/{}", CATALOG_BASE_URL, node);
         let method = Method::GET;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -92,7 +94,7 @@ impl Runner {
     }
 
     pub async fn catalog_gateway_services(&self, gateway: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/catalog/gateway-services/{}", gateway);
+        let path = format!("{}/gateway-services/{}", CATALOG_BASE_URL, gateway);
         let method = Method::GET;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
