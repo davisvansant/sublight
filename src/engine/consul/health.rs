@@ -1,8 +1,10 @@
 use crate::{Body, Error, Method, Response, Runner};
 
+const HEALTH_BASE_URL: &str = "/v1/health";
+
 impl Runner {
     pub async fn health_node(&self, node: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/health/node/{}", node);
+        let path = format!("{}/node/{}", HEALTH_BASE_URL, node);
         let method = Method::GET;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -12,7 +14,7 @@ impl Runner {
     }
 
     pub async fn health_checks(&self, service: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/health/checks/{}", service);
+        let path = format!("{}/checks/{}", HEALTH_BASE_URL, service);
         let method = Method::GET;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -22,7 +24,7 @@ impl Runner {
     }
 
     pub async fn health_service(&self, service: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/health/service/{}", service);
+        let path = format!("{}/service/{}", HEALTH_BASE_URL, service);
         let method = Method::GET;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -32,7 +34,7 @@ impl Runner {
     }
 
     pub async fn health_connect(&self, service: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/health/connect/{}", service);
+        let path = format!("{}/connect/{}", HEALTH_BASE_URL, service);
         let method = Method::GET;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -42,7 +44,7 @@ impl Runner {
     }
 
     pub async fn health_ingress(&self, service: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/health/ingress/{}", service);
+        let path = format!("{}/ingress/{}", HEALTH_BASE_URL, service);
         let method = Method::GET;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -52,7 +54,7 @@ impl Runner {
     }
 
     pub async fn health_state(&self, state: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/health/state/{}", state);
+        let path = format!("{}/state/{}", HEALTH_BASE_URL, state);
         let method = Method::GET;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
