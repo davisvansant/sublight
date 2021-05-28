@@ -1,8 +1,10 @@
 use crate::{Body, Error, Method, Response, Runner};
 
+const EVENT_BASE_URL: &str = "/v1/event";
+
 impl Runner {
     pub async fn event_fire(&self, name: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/event/fire/{}", name);
+        let path = format!("{}/fire/{}", EVENT_BASE_URL, name);
         let method = Method::PUT;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -12,9 +14,9 @@ impl Runner {
     }
 
     pub async fn event_list(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/event/list";
+        let path = format!("{}/list", EVENT_BASE_URL);
         let method = Method::GET;
-        let uri = self.build_uri(path).await;
+        let uri = self.build_uri(&path).await;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
         let response = self.client.request(request).await?;
