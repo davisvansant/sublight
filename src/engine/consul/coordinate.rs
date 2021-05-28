@@ -1,10 +1,12 @@
 use crate::{Body, Error, Method, Response, Runner};
 
+const COORDINATE_BASE_URL: &str = "/v1/coordinate";
+
 impl Runner {
     pub async fn coordinate_datacenters(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/coordinate/datacenters";
+        let path = format!("{}/datacenters", COORDINATE_BASE_URL);
         let method = Method::GET;
-        let uri = self.build_uri(path).await;
+        let uri = self.build_uri(&path).await;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
         let response = self.client.request(request).await?;
@@ -12,9 +14,9 @@ impl Runner {
     }
 
     pub async fn coordinate_nodes(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/coordinate/nodes";
+        let path = format!("{}/nodes", COORDINATE_BASE_URL);
         let method = Method::GET;
-        let uri = self.build_uri(path).await;
+        let uri = self.build_uri(&path).await;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
         let response = self.client.request(request).await?;
@@ -22,7 +24,7 @@ impl Runner {
     }
 
     pub async fn coordinate_node(&self, node: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/coordinate/node/{}", node);
+        let path = format!("{}/node/{}", COORDINATE_BASE_URL, node);
         let method = Method::GET;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -32,9 +34,9 @@ impl Runner {
     }
 
     pub async fn coordinate_update(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/coordinate/update";
+        let path = format!("{}/update", COORDINATE_BASE_URL);
         let method = Method::PUT;
-        let uri = self.build_uri(path).await;
+        let uri = self.build_uri(&path).await;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
         let response = self.client.request(request).await?;
