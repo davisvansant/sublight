@@ -1,8 +1,10 @@
 use crate::{Body, Error, Method, Response, Runner};
 
+const SNAPSHOT_BASE_URL: &str = "/v1/snapshot";
+
 impl Runner {
     pub async fn snapshot_generate(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/snapshot";
+        let path = SNAPSHOT_BASE_URL;
         let method = Method::GET;
         let uri = self.build_uri(path).await;
         let body = Body::empty();
@@ -12,7 +14,7 @@ impl Runner {
     }
 
     pub async fn snapshot_restore(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/snapshot";
+        let path = SNAPSHOT_BASE_URL;
         let method = Method::PUT;
         let uri = self.build_uri(path).await;
         let body = Body::empty();
