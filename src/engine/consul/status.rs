@@ -1,10 +1,12 @@
 use crate::{Body, Error, Method, Response, Runner};
 
+const STATUS_BASE_URL: &str = "/v1/status";
+
 impl Runner {
     pub async fn status_leader(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/status/leader";
+        let path = format!("{}/leader", STATUS_BASE_URL);
         let method = Method::GET;
-        let uri = self.build_uri(path).await;
+        let uri = self.build_uri(&path).await;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
         let response = self.client.request(request).await?;
@@ -12,9 +14,9 @@ impl Runner {
     }
 
     pub async fn status_peers(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/status/peers";
+        let path = format!("{}/peers", STATUS_BASE_URL);
         let method = Method::GET;
-        let uri = self.build_uri(path).await;
+        let uri = self.build_uri(&path).await;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
         let response = self.client.request(request).await?;
