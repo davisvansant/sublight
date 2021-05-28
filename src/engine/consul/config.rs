@@ -1,8 +1,10 @@
 use crate::{Body, Error, Method, Response, Runner};
 
+const CONFIG_BASE_URL: &str = "/v1/config";
+
 impl Runner {
     pub async fn config_apply(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/config";
+        let path = CONFIG_BASE_URL;
         let method = Method::PUT;
         let uri = self.build_uri(path).await;
         let body = Body::empty();
@@ -12,7 +14,7 @@ impl Runner {
     }
 
     pub async fn config_get(&self, kind: &str, name: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/config/{}/{}", kind, name);
+        let path = format!("{}/{}/{}", CONFIG_BASE_URL, kind, name);
         let method = Method::GET;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -22,7 +24,7 @@ impl Runner {
     }
 
     pub async fn config_list(&self, kind: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/config/{}", kind);
+        let path = format!("{}/{}", CONFIG_BASE_URL, kind);
         let method = Method::GET;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -32,7 +34,7 @@ impl Runner {
     }
 
     pub async fn config_delete(&self, kind: &str, name: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/config/{}/{}", kind, name);
+        let path = format!("{}/{}/{}", CONFIG_BASE_URL, kind, name);
         let method = Method::DELETE;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
