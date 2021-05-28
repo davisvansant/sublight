@@ -1,10 +1,12 @@
 use crate::{Body, Error, Method, Response, Runner};
 
+const SESSION_BASE_URL: &str = "/v1/session";
+
 impl Runner {
     pub async fn session_create(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/session/create";
+        let path = format!("{}/create", SESSION_BASE_URL);
         let method = Method::PUT;
-        let uri = self.build_uri(path).await;
+        let uri = self.build_uri(&path).await;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
         let response = self.client.request(request).await?;
@@ -12,7 +14,7 @@ impl Runner {
     }
 
     pub async fn session_destroy(&self, uuid: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/session/destroy/{}", uuid);
+        let path = format!("{}/destroy/{}", SESSION_BASE_URL, uuid);
         let method = Method::PUT;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -22,7 +24,7 @@ impl Runner {
     }
 
     pub async fn session_info(&self, uuid: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/session/info/{}", uuid);
+        let path = format!("{}/info/{}", SESSION_BASE_URL, uuid);
         let method = Method::GET;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -32,7 +34,7 @@ impl Runner {
     }
 
     pub async fn session_node(&self, node: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/session/node/{}", node);
+        let path = format!("{}/node/{}", SESSION_BASE_URL, node);
         let method = Method::GET;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -42,9 +44,9 @@ impl Runner {
     }
 
     pub async fn session_list(&self) -> Result<Response<Body>, Error> {
-        let path = "/v1/session/list";
+        let path = format!("{}/list", SESSION_BASE_URL);
         let method = Method::GET;
-        let uri = self.build_uri(path).await;
+        let uri = self.build_uri(&path).await;
         let body = Body::empty();
         let request = self.build_request(method, uri, body).await;
         let response = self.client.request(request).await?;
@@ -52,7 +54,7 @@ impl Runner {
     }
 
     pub async fn session_renew(&self, uuid: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/session/renew/{}", uuid);
+        let path = format!("{}/renew/{}", SESSION_BASE_URL, uuid);
         let method = Method::PUT;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
