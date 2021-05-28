@@ -1,8 +1,10 @@
 use crate::{Body, Error, Method, Response, Runner};
 
+const KV_STORE_BASE_URL: &str = "/v1/kv";
+
 impl Runner {
     pub async fn key_get(&self, key: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/key/{}", key);
+        let path = format!("{}/{}", KV_STORE_BASE_URL, key);
         let method = Method::GET;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -12,7 +14,7 @@ impl Runner {
     }
 
     pub async fn key_put(&self, key: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/key/{}", key);
+        let path = format!("{}/{}", KV_STORE_BASE_URL, key);
         let method = Method::PUT;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -22,7 +24,7 @@ impl Runner {
     }
 
     pub async fn key_delete(&self, key: &str) -> Result<Response<Body>, Error> {
-        let path = format!("/v1/key/{}", key);
+        let path = format!("{}/{}", KV_STORE_BASE_URL, key);
         let method = Method::DELETE;
         let uri = self.build_uri(&path).await;
         let body = Body::empty();
@@ -41,7 +43,7 @@ mod tests {
     async fn key_get() -> Result<(), Error> {
         let test_mock_url = mockito::server_url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/key/test_key")
+        let mock = mock("GET", "/v1/kv/test_key")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -56,7 +58,7 @@ mod tests {
     async fn key_put() -> Result<(), Error> {
         let test_mock_url = mockito::server_url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("PUT", "/v1/key/test_key")
+        let mock = mock("PUT", "/v1/kv/test_key")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -71,7 +73,7 @@ mod tests {
     async fn key_delete() -> Result<(), Error> {
         let test_mock_url = mockito::server_url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("DELETE", "/v1/key/test_key")
+        let mock = mock("DELETE", "/v1/kv/test_key")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
