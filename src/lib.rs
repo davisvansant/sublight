@@ -102,7 +102,7 @@ mod tests {
         for (name, value) in test_runner.default_headers.iter() {
             assert_eq!(name.as_str(), "user-agent");
             assert_eq!(value.to_str().unwrap(), "sublight/0.1.0");
-            assert_eq!(value.is_sensitive(), false);
+            assert!(!value.is_sensitive());
         }
         assert_eq!(test_runner.scheme.as_str(), "http");
         assert_eq!(test_runner.authority.as_str(), "example.com");
@@ -117,7 +117,7 @@ mod tests {
         )
         .await;
         assert_eq!(test_runner.endpoint, "http://example.com/");
-        assert_eq!(test_runner.default_headers.is_empty(), false);
+        assert!(!test_runner.default_headers.is_empty());
         assert_eq!(test_runner.default_headers.len(), 2);
         assert!(test_runner.default_headers.capacity() >= 5);
         assert_eq!(
