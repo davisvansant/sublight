@@ -27,13 +27,15 @@ impl Runner {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use mockito::mock;
+    use mockito::Server;
 
     #[tokio::test(flavor = "multi_thread")]
     async fn status_leader() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/status/leader")
+        let mock = test_server
+            .mock("GET", "/v1/status/leader")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -46,9 +48,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn status_peers() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/status/peers")
+        let mock = test_server
+            .mock("GET", "/v1/status/peers")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")

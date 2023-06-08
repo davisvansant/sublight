@@ -47,13 +47,15 @@ impl Runner {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use mockito::mock;
+    use mockito::Server;
 
     #[tokio::test(flavor = "multi_thread")]
     async fn config_apply() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("PUT", "/v1/config")
+        let mock = test_server
+            .mock("PUT", "/v1/config")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -66,9 +68,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn config_get() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/config/test_config_kind/test_config_name")
+        let mock = test_server
+            .mock("GET", "/v1/config/test_config_kind/test_config_name")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -83,9 +87,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn config_list() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/config/test_config_kind")
+        let mock = test_server
+            .mock("GET", "/v1/config/test_config_kind")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -98,9 +104,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn config_delete() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("DELETE", "/v1/config/test_config_kind/test_config_name")
+        let mock = test_server
+            .mock("DELETE", "/v1/config/test_config_kind/test_config_name")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")

@@ -91,13 +91,15 @@ impl Runner {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use mockito::mock;
+    use mockito::Server;
 
     #[tokio::test(flavor = "multi_thread")]
     async fn list_members() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/agent/members")
+        let mock = test_server
+            .mock("GET", "/v1/agent/members")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -110,9 +112,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn agent_self() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/agent/self")
+        let mock = test_server
+            .mock("GET", "/v1/agent/self")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -125,9 +129,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn agent_reload() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("PUT", "/v1/agent/reload")
+        let mock = test_server
+            .mock("PUT", "/v1/agent/reload")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -140,9 +146,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn agent_maintenance() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("PUT", "/v1/agent/maintentance")
+        let mock = test_server
+            .mock("PUT", "/v1/agent/maintentance")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -155,9 +163,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn agent_metrics() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/agent/metrics")
+        let mock = test_server
+            .mock("GET", "/v1/agent/metrics")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -170,9 +180,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn agent_monitor() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/agent/monitor")
+        let mock = test_server
+            .mock("GET", "/v1/agent/monitor")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -185,9 +197,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn agent_join() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("PUT", "/v1/agent/join/1.2.3.4")
+        let mock = test_server
+            .mock("PUT", "/v1/agent/join/1.2.3.4")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -200,9 +214,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn agent_leave() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("PUT", "/v1/agent/leave")
+        let mock = test_server
+            .mock("PUT", "/v1/agent/leave")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")

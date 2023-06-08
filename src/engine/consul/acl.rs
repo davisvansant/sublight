@@ -53,13 +53,15 @@ impl Runner {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use mockito::mock;
+    use mockito::Server;
 
     #[tokio::test(flavor = "multi_thread")]
     async fn acl_bootstrap() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("PUT", "/v1/acl/bootstrap")
+        let mock = test_server
+            .mock("PUT", "/v1/acl/bootstrap")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -72,9 +74,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn acl_replication() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/acl/replication")
+        let mock = test_server
+            .mock("GET", "/v1/acl/replication")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -87,9 +91,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn acl_login() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("POST", "/v1/acl/login")
+        let mock = test_server
+            .mock("POST", "/v1/acl/login")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -102,9 +108,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn acl_logout() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("POST", "/v1/acl/logout")
+        let mock = test_server
+            .mock("POST", "/v1/acl/logout")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")

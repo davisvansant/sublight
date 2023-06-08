@@ -37,13 +37,15 @@ impl Runner {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use mockito::mock;
+    use mockito::Server;
 
     #[tokio::test(flavor = "multi_thread")]
     async fn key_get() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/kv/test_key")
+        let mock = test_server
+            .mock("GET", "/v1/kv/test_key")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -56,9 +58,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn key_put() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("PUT", "/v1/kv/test_key")
+        let mock = test_server
+            .mock("PUT", "/v1/kv/test_key")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -71,9 +75,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn key_delete() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("DELETE", "/v1/kv/test_key")
+        let mock = test_server
+            .mock("DELETE", "/v1/kv/test_key")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")

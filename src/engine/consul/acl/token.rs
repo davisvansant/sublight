@@ -77,13 +77,15 @@ impl Runner {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use mockito::mock;
+    use mockito::Server;
 
     #[tokio::test(flavor = "multi_thread")]
     async fn acl_token_create() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("PUT", "/v1/acl/token")
+        let mock = test_server
+            .mock("PUT", "/v1/acl/token")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -96,9 +98,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn acl_token_get() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/acl/token/test_accessor_id")
+        let mock = test_server
+            .mock("GET", "/v1/acl/token/test_accessor_id")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -111,9 +115,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn acl_token_self() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/acl/token/self")
+        let mock = test_server
+            .mock("GET", "/v1/acl/token/self")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -126,9 +132,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn acl_token_update() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("PUT", "/v1/acl/token/test_accessor_id")
+        let mock = test_server
+            .mock("PUT", "/v1/acl/token/test_accessor_id")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -141,9 +149,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn acl_token_clone() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("PUT", "/v1/acl/token/test_accessor_id/clone")
+        let mock = test_server
+            .mock("PUT", "/v1/acl/token/test_accessor_id/clone")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -156,9 +166,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn acl_token_delete() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("DELETE", "/v1/acl/token/test_accessor_id")
+        let mock = test_server
+            .mock("DELETE", "/v1/acl/token/test_accessor_id")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -171,9 +183,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn acl_tokens() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/acl/tokens")
+        let mock = test_server
+            .mock("GET", "/v1/acl/tokens")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")

@@ -77,13 +77,15 @@ impl Runner {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use mockito::mock;
+    use mockito::Server;
 
     #[tokio::test(flavor = "multi_thread")]
     async fn agent_checks() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/agent/checks")
+        let mock = test_server
+            .mock("GET", "/v1/agent/checks")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -96,9 +98,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn agent_check_register() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("PUT", "/v1/agent/check/register")
+        let mock = test_server
+            .mock("PUT", "/v1/agent/check/register")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -111,9 +115,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn agent_check_deregister() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("PUT", "/v1/agent/check/deregister/test_check_id")
+        let mock = test_server
+            .mock("PUT", "/v1/agent/check/deregister/test_check_id")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -126,9 +132,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn agent_check_pass() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("PUT", "/v1/agent/check/pass/test_check_id")
+        let mock = test_server
+            .mock("PUT", "/v1/agent/check/pass/test_check_id")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -141,9 +149,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn agent_check_warn() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("PUT", "/v1/agent/check/warn/test_check_id")
+        let mock = test_server
+            .mock("PUT", "/v1/agent/check/warn/test_check_id")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -156,9 +166,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn agent_check_fail() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("PUT", "/v1/agent/check/fail/test_check_id")
+        let mock = test_server
+            .mock("PUT", "/v1/agent/check/fail/test_check_id")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -171,9 +183,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn agent_check_update() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("PUT", "/v1/agent/check/update/test_check_id")
+        let mock = test_server
+            .mock("PUT", "/v1/agent/check/update/test_check_id")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")

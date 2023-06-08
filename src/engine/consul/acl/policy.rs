@@ -67,13 +67,15 @@ impl Runner {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use mockito::mock;
+    use mockito::Server;
 
     #[tokio::test(flavor = "multi_thread")]
     async fn acl_policy_create() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("PUT", "/v1/acl/policy")
+        let mock = test_server
+            .mock("PUT", "/v1/acl/policy")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -86,9 +88,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn acl_policy_read() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/acl/policy/test_policy_id")
+        let mock = test_server
+            .mock("GET", "/v1/acl/policy/test_policy_id")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -101,9 +105,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn acl_policy_read_name() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/acl/policy/name/test_policy_name")
+        let mock = test_server
+            .mock("GET", "/v1/acl/policy/name/test_policy_name")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -116,9 +122,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn acl_policy_update() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("PUT", "/v1/acl/policy/test_policy_id")
+        let mock = test_server
+            .mock("PUT", "/v1/acl/policy/test_policy_id")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -131,9 +139,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn acl_policy_delete() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("DELETE", "/v1/acl/policy/test_policy_id")
+        let mock = test_server
+            .mock("DELETE", "/v1/acl/policy/test_policy_id")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -146,9 +156,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn acl_policies() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/acl/policies")
+        let mock = test_server
+            .mock("GET", "/v1/acl/policies")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")

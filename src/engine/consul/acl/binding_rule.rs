@@ -57,13 +57,15 @@ impl Runner {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use mockito::mock;
+    use mockito::Server;
 
     #[tokio::test(flavor = "multi_thread")]
     async fn acl_binding_rule_create() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("PUT", "/v1/acl/binding-rule")
+        let mock = test_server
+            .mock("PUT", "/v1/acl/binding-rule")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -76,9 +78,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn acl_binding_rule_read() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/acl/binding-rule/test_binding_rule_id")
+        let mock = test_server
+            .mock("GET", "/v1/acl/binding-rule/test_binding_rule_id")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -93,9 +97,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn acl_binding_rule_update() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("PUT", "/v1/acl/binding-rule/test_binding_rule_id")
+        let mock = test_server
+            .mock("PUT", "/v1/acl/binding-rule/test_binding_rule_id")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -110,9 +116,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn acl_binding_rule_delete() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("DELETE", "/v1/acl/binding-rule/test_binding_rule_id")
+        let mock = test_server
+            .mock("DELETE", "/v1/acl/binding-rule/test_binding_rule_id")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -127,9 +135,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn acl_binding_rules() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/acl/binding-rules")
+        let mock = test_server
+            .mock("GET", "/v1/acl/binding-rules")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")

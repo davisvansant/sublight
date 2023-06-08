@@ -107,13 +107,15 @@ impl Runner {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use mockito::mock;
+    use mockito::Server;
 
     #[tokio::test(flavor = "multi_thread")]
     async fn catalog_register() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("PUT", "/v1/catalog/register")
+        let mock = test_server
+            .mock("PUT", "/v1/catalog/register")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -126,9 +128,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn catalog_deregister() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("PUT", "/v1/catalog/deregister")
+        let mock = test_server
+            .mock("PUT", "/v1/catalog/deregister")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -141,9 +145,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn catalog_datacenters() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/catalog/datacenters")
+        let mock = test_server
+            .mock("GET", "/v1/catalog/datacenters")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -156,9 +162,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn catalog_nodes() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/catalog/nodes")
+        let mock = test_server
+            .mock("GET", "/v1/catalog/nodes")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -171,9 +179,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn catalog_services() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/catalog/services")
+        let mock = test_server
+            .mock("GET", "/v1/catalog/services")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -186,9 +196,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn catalog_service_nodes() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/catalog/service/test_catalog_service")
+        let mock = test_server
+            .mock("GET", "/v1/catalog/service/test_catalog_service")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -203,9 +215,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn catalog_connect_nodes() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/catalog/connect/test_connect_service")
+        let mock = test_server
+            .mock("GET", "/v1/catalog/connect/test_connect_service")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -220,9 +234,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn catalog_node() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/catalog/node/test_node")
+        let mock = test_server
+            .mock("GET", "/v1/catalog/node/test_node")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -235,9 +251,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn catalog_node_services() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/catalog/node-services/test_node")
+        let mock = test_server
+            .mock("GET", "/v1/catalog/node-services/test_node")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -250,9 +268,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn catalog_gateway_services() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/catalog/gateway-services/test_gateway")
+        let mock = test_server
+            .mock("GET", "/v1/catalog/gateway-services/test_gateway")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")

@@ -67,13 +67,15 @@ impl Runner {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use mockito::mock;
+    use mockito::Server;
 
     #[tokio::test(flavor = "multi_thread")]
     async fn health_node() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/health/node/test_node")
+        let mock = test_server
+            .mock("GET", "/v1/health/node/test_node")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -86,9 +88,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn health_checks() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/health/checks/test_service")
+        let mock = test_server
+            .mock("GET", "/v1/health/checks/test_service")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -101,9 +105,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn health_service() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/health/service/test_service")
+        let mock = test_server
+            .mock("GET", "/v1/health/service/test_service")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -116,9 +122,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn health_connect() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/health/connect/test_service")
+        let mock = test_server
+            .mock("GET", "/v1/health/connect/test_service")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -131,9 +139,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn health_ingress() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/health/ingress/test_service")
+        let mock = test_server
+            .mock("GET", "/v1/health/ingress/test_service")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -146,9 +156,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn health_state() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/health/state/test_state")
+        let mock = test_server
+            .mock("GET", "/v1/health/state/test_state")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")

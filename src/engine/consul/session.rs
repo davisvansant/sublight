@@ -67,13 +67,15 @@ impl Runner {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use mockito::mock;
+    use mockito::Server;
 
     #[tokio::test(flavor = "multi_thread")]
     async fn session_create() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("PUT", "/v1/session/create")
+        let mock = test_server
+            .mock("PUT", "/v1/session/create")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -86,9 +88,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn session_destroy() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("PUT", "/v1/session/destroy/test_uuid")
+        let mock = test_server
+            .mock("PUT", "/v1/session/destroy/test_uuid")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -101,9 +105,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn session_info() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/session/info/test_uuid")
+        let mock = test_server
+            .mock("GET", "/v1/session/info/test_uuid")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -116,9 +122,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn session_node() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/session/node/test_node")
+        let mock = test_server
+            .mock("GET", "/v1/session/node/test_node")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -131,9 +139,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn session_list() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("GET", "/v1/session/list")
+        let mock = test_server
+            .mock("GET", "/v1/session/list")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
@@ -146,9 +156,11 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn session_renew() -> Result<(), Error> {
-        let test_mock_url = mockito::server_url();
+        let mut test_server = Server::new();
+        let test_mock_url = test_server.url();
         let test_runner = Runner::init(&test_mock_url, None, None).await;
-        let mock = mock("PUT", "/v1/session/renew/test_uuid")
+        let mock = test_server
+            .mock("PUT", "/v1/session/renew/test_uuid")
             .with_status(200)
             .with_header("user-agent", "sublight/0.1.0")
             .with_body("")
